@@ -21,5 +21,17 @@ public class StringSupplyTemplates {
                 .build();
     }
 
+    public static Stream<String> templateFileFirst(int input) {
+        return SupplyChain
+                .newSupplyChain()
+                .take(5).from(fileSupplier(input, "filename"))
+                .then()
+                .take(10).from(httpSupplier(input))
+                .then()
+                .takeAll().from(Arrays.asList("this", "is", "my", "static", "backup"))
+                .build();
+    }
+
+
 
 }

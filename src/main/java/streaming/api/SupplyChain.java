@@ -8,12 +8,12 @@ import java.util.stream.StreamSupport;
 public class SupplyChain {
 
 
-    private static final Stream<String> EMPTY_STREAM = Stream.empty();
+
 
     private Stream<String> currentStream;
 
     private SupplyChain() {
-        this.currentStream = EMPTY_STREAM;
+        this.currentStream = Stream.empty();
     }
 
     private SupplyChain(Stream<String> stream) {
