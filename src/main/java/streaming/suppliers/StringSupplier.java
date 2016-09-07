@@ -1,4 +1,4 @@
-package streaming;
+package streaming.suppliers;
 
 import java.util.function.Supplier;
 
