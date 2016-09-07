@@ -24,33 +24,33 @@ public class SupplyChain {
         return new SupplyChain();
     }
 
-    private SupplyChain add(Stream<String> newStream) {
+    private SupplyChain append(Stream<String> newStream) {
         return new SupplyChain(Stream.concat(currentStream, newStream));
     }
 
 
-    public InfiniteStringSupplierBuilder take(int amount) {
-        return new InfiniteStringSupplierBuilder(amount);
+    public StreamSupplierBuilder take(int amount) {
+        return new StreamSupplierBuilder(amount);
     }
 
     public SupplyChain then() {
         return this;
     }
 
-    public FiniteSupplierBuilder takeAll() {
-        return new FiniteSupplierBuilder();
+    public CollectionSupplierBuilder takeAll() {
+        return new CollectionSupplierBuilder();
     }
 
     public Stream<String> build() {
         return currentStream;
     }
 
-    public class InfiniteStringSupplierBuilder {
+    public class StreamSupplierBuilder {
         private final SupplyChain supplier;
 
         final int amount;
 
-        private InfiniteStringSupplierBuilder(int amount) {
+        private StreamSupplierBuilder(int amount) {
             this.supplier = SupplyChain.this;
             this.amount = amount;
         }
@@ -58,23 +58,23 @@ public class SupplyChain {
         public SupplyChain from(Supplier<String> stringSupplier) {
 
             Stream<String> s = Stream.generate(stringSupplier);
-            return supplier.add(s.limit(amount));
+            return supplier.append(s.limit(amount));
         }
 
     }
 
-    public class FiniteSupplierBuilder {
+    public class CollectionSupplierBuilder {
 
         public static final boolean NOT_PARALLEL = false;
         final SupplyChain supplier;
 
-        public FiniteSupplierBuilder() {
+        public CollectionSupplierBuilder() {
             supplier = SupplyChain.this;
         }
 
 
         public SupplyChain from(Collection<String> stringCollection) {
-            return supplier.add(StreamSupport.stream(stringCollection.spliterator(), NOT_PARALLEL));
+            return supplier.append(StreamSupport.stream(stringCollection.spliterator(), NOT_PARALLEL));
         }
     }
 }
