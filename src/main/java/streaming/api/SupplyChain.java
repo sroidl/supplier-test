@@ -5,6 +5,8 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import static streaming.api.SupplyChain.CollectionSupplierBuilder.NOT_PARALLEL;
+
 public class SupplyChain {
 
 
@@ -57,8 +59,13 @@ public class SupplyChain {
 
         public SupplyChain from(Supplier<String> stringSupplier) {
 
-            Stream<String> s = Stream.generate(stringSupplier);
-            return supplier.append(s.limit(amount));
+            Stream<String> s = Stream.generate(stringSupplier).limit(amount);
+            return supplier.append(s);
+        }
+
+        public SupplyChain from(Collection<String> stringCollection) {
+            Stream s = StreamSupport.stream(stringCollection.spliterator(), NOT_PARALLEL).limit(amount);
+            return supplier.append(s);
         }
 
     }
